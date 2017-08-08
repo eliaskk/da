@@ -8,6 +8,8 @@ import time, simplejson, MySQLdb
 from utils.medicineVec import read4Vec
 from DataAnalysisTools import checkDataSetQualityAndIn, fetchTopMedicineCounts, firstClassVocFromSpecial
 
+from CandyOnline.settings import DATABASES_HOST, DATABASES_USER, DATABASES_NAME, DATABASES_PASSWORD
+
 
 # Create your views here.
 class DataAnalysor(View):
@@ -44,7 +46,7 @@ class DataAnalysorSave(View):
         sql = "insert into medicinedataset_quality(patientContent,contentVec,prescriptionName,qualityRecord) VALUES ('"+\
               patientContent+"','"+contentVec+"','"+prescriptionName+"','"+qualityRecord+"')"
 
-        conn = MySQLdb.connect("127.0.0.1", "root", "w1020392881", "candyonline", use_unicode=True, charset="utf8")
+        conn = MySQLdb.connect(DATABASES_HOST, DATABASES_USER, DATABASES_PASSWORD, DATABASES_NAME, use_unicode=True, charset="utf8")
         try:
             cursor = conn.cursor()
             if cursor.execute("select id from medicinedataset_quality where patientContent='"+patientContent+"'") > 0:
@@ -123,7 +125,8 @@ class PrescriptionAssoicationSave(View):
               "firstClassWords,contentVec) values ('"+specialWord+"','"+prescriptionName+"',"+setNums+","+sequenceChoice +\
               ",'"+firstClassWords+"','"+contentVec+"')"
         print sql
-        conn = MySQLdb.connect("127.0.0.1", "root", "w1020392881", "candyonline", use_unicode=True, charset="utf8")
+        conn = MySQLdb.connect(DATABASES_HOST, DATABASES_USER, DATABASES_PASSWORD, DATABASES_NAME, use_unicode=True,
+                               charset="utf8")
         try:
             cursor = conn.cursor()
             if cursor.execute("select id from classicalprescription_firstclassvoc where prescriptionName='"+prescriptionName+"' and contentVec='"+contentVec+"'") > 0:
